@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    privileged: true
+    volumes:
+      - .:/var/www/app
+    depends_on:
+      - mysql
+    environment:
+      - DATABASE_URL=mysql://symfony_user:symfony_pass@db:3306/symfony_db
+    ports:
+      - "8080:80"
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: symfony_db
+      MYSQL_USER: symfony_user
+      MYSQL_PASSWORD: symfony_pass
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
